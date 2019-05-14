@@ -4,7 +4,6 @@ namespace App\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -19,4 +18,16 @@ class BlogController extends AbstractController
             'owner' => 'Jamy',
     	]);
     }
+
+    /**
+     * @Route("/blog/show/{slug}", requirements={"slug"="[0-9a-z\-]+"}, defaults={"slug"="Article sans titre"},  name="blog_slug")
+    */
+    public function show($slug)
+    {
+        $replace = str_replace("-"," ",($slug));
+        $replace = ucwords($replace);
+        return $this->render('blog/show.html.twig', ['infoSlug' => $replace]);
+    }
+
+
 }
