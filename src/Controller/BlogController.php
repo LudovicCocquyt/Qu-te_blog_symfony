@@ -13,7 +13,7 @@ use App\Entity\Category;
 
 class BlogController extends AbstractController
 {
-	
+
      /**
      * Show all row from article's entity
      *
@@ -79,25 +79,42 @@ class BlogController extends AbstractController
         );
     }
 
+    // public function showByCategory(string $categoryName)
+    // {
+    //     $category = $this->getDoctrine()
+    //         ->getRepository(Category::class)
+    //         ->findOneBy(['name'=> $categoryName]);
+
+    //     $article = $this->getDoctrine()
+    //         ->getRepository(Article::class)
+    //         ->findBy(['category' => $category],[ "id" =>"desc"], 3);
+
+    //         return $this->render(
+    //             'blog/category.html.twig',
+    //             [
+    //               'articles'     => $article,
+    //               'categoryName' => $category,
+
+    //             ]);
+    // }
+
+
     /**
-     * @Route("/blog/category/{categoryName<^[a-z0-9-]+$>}", name="show_category")
-     */
+     * @Route("/blog/category/{categoryName}", name="show_category")
+    */
     public function showByCategory(string $categoryName)
     {
         $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findOneBy(['name'=> $categoryName]);
-
-        $article = $this->getDoctrine()
-            ->getRepository(Article::class)
-            ->findBy(['category' => $category],[ "id" =>"desc"], 3);  
+        $article = $category->getArticles();
 
             return $this->render(
-                'blog/category.html.twig',
-                [
-                  'articles'     => $article,
-                  'categoryName' => $category,
+              'blog/category.html.twig',
+              [
+                'articles'     => $article  ,
+                'categoryName' => $category,
 
-                ]);
+              ]);
     }
 }
