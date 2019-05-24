@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Tag;
+
 
 
 
@@ -55,28 +57,28 @@ class BlogController extends AbstractController
                 ->createNotFoundException('No slug has been sent to find an article in article\'s table.');
             }
 
-         $slug = preg_replace(
-          '/-/',
-          ' ', ucwords(trim(strip_tags($slug)), "-")
+           $slug = preg_replace(
+            '/-/',
+            ' ', ucwords(trim(strip_tags($slug)), "-")
+              );
+
+           $article = $this->getDoctrine()
+                  ->getRepository(Article::class)
+                  ->findOneBy(['title' => mb_strtolower($slug)]);
+
+           if (!$article) {
+                throw $this->createNotFoundException(
+                'No article with '.$slug.' title, found in article\'s table.'
             );
+          }
 
-         $article = $this->getDoctrine()
-                ->getRepository(Article::class)
-                ->findOneBy(['title' => mb_strtolower($slug)]);
-
-         if (!$article) {
-              throw $this->createNotFoundException(
-              'No article with '.$slug.' title, found in article\'s table.'
-          );
-        }
-
-         return $this->render(
-         'blog/show.html.twig',
-          [
-                  'article' => $article,
-                  'slug'    => $slug,
-          ]
-        );
+             return $this->render(
+             'blog/show.html.twig',
+              [
+                      'article' => $article,
+                      'slug'    => $slug,
+              ]
+            );
     }
 
     // public function showByCategory(string $categoryName)
@@ -102,7 +104,7 @@ class BlogController extends AbstractController
     /**
      * @Route("/blog/category/{name}", name="show_category")
      */
-    public function showByCategory(Category $categoryName): Response
+    public function showByCategory(category $categoryName): Response
     {
         // $category = $this->getDoctrine()
         //     ->getRepository(Category::class)
@@ -114,6 +116,21 @@ class BlogController extends AbstractController
               [
                 'articles'     => $articles,
                 'categoryName' => $categoryName
+              ]);
+    }
+
+    /**
+     * @Route("/article/tag/{name}", name="show_tag")
+     */
+    public function showByTag(Tag $tagName): Response
+    {
+        $tags = $tagName->getArticles();
+
+            return $this->render(
+              'article/tag.html.twig',
+              [
+                'tags'     => $tags,
+                'tagName' => $tagName
               ]);
     }
 
