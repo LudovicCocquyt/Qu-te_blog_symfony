@@ -25,7 +25,7 @@ class CategorieController extends AbstractController
 		$form = $this->createForm(CategoryType::class, $category);
 
 		$form->handleRequest($request);
-		if ($form->isSubmitted()) {
+		if ($form->isSubmitted() && $form->isValid()) {
 	      $data = $form->getData();
 	      $manager->persist($data);
 	      $manager->flush();
