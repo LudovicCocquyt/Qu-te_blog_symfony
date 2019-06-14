@@ -20,9 +20,10 @@ class ArticleController extends AbstractController
      * @Route("/", name="article_index", methods={"GET"})
      */
     public function index(ArticleRepository $articleRepository): Response
-    {
+    {   $article=$articleRepository->findAll();
+        dump($article);
         return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
+            'articles' => $article,
         ]);
     }
 
@@ -40,7 +41,8 @@ class ArticleController extends AbstractController
 
             $slug = $slugify->generate($article->getTitle());
             $article->setSlug($slug);
-
+            $author = $this->getUser();
+            $article->setAuthor($author);
             $entityManager->persist($article);
             $entityManager->flush();
             //envoi du message

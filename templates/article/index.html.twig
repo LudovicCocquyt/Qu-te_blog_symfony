@@ -12,6 +12,7 @@
                 <th>Category</th>
                 <th>Title</th>
                 <th>Content</th>
+                <th>Author</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -21,6 +22,10 @@
                 <td>{{ article.category.name }}</td>
                 <td>{{ article.title }}</td>
                 <td>{{ article.content }}</td>
+                <td>
+                {% if article.author.email is defined %}
+                    {{ article.author.email }}
+                    {% endif %}</td>
                 <td>
                     <a href="{{ path('article_show', {'id': article.id}) }}">show</a>
                     <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a>

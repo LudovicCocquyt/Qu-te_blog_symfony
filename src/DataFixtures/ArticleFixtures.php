@@ -20,6 +20,7 @@ use Faker;
 
 			$article->setTitle(mb_strtolower($faker->sentence()));
 			$article->setContent(mb_strtolower($faker->sentence()));
+			$article->setSlug($faker->sentence());
 			$manager->persist($article);
 			$article->setCategory($this->getReference('categorie_'.rand(0,4)));
 		}
