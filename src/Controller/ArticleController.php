@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\Slugify;
 
 /**
@@ -21,7 +22,7 @@ class ArticleController extends AbstractController
      */
     public function index(ArticleRepository $articleRepository): Response
     {   $article=$articleRepository->findAll();
-        dump($article);
+
         return $this->render('article/index.html.twig', [
             'articles' => $article,
         ]);
@@ -72,9 +73,11 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_AUTHOR")
      */
     public function edit(Request $request, Article $article): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $article);
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 

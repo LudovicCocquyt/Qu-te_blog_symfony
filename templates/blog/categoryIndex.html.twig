@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste catégorie </h1>
+    {% for category in categories %}
+        <div>
+            <p>{{ category.name }}</p>
+        </div>
+        {% else %}
+        Aucun article trouvé.
+    {% endfor %}
+    <a href="{{ path('app_index') }}">
+      Back to homepage.
+    </a>
+{% endblock %}

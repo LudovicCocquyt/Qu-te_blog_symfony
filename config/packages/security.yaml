@@ -19,6 +19,8 @@ security:
                 path:   app_logout
                 # where to redirect after logout
                 target: blog_index
+            form_login:
+                failure_path: blog_index
             anonymous: true
             guard:
                 authenticators:
@@ -34,7 +36,10 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
+    role_hierarchy:
+         ROLE_AUTHOR:    ROLE_USER
+         ROLE_ADMIN:     ROLE_AUTHOR
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-        - {  path : ^/login$ ,  roles : IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/article, roles: ROLE_AUTHOR }
+         - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/login$ ,  roles : IS_AUTHENTICATED_ANONYMOUSLY }
