@@ -25,7 +25,7 @@
     <a href="{{ path('article_index') }}">back to list</a>
 
     {# <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a> #}
-    {% if is_granted('EDIT', article) %}
+    {% if is_granted('EDIT', article) or is_granted("ROLE_ADMIN") %}
         <a href="{{ path('article_edit', { 'id': article.id} ) }}">Éditer</a>
     {% endif %}
 

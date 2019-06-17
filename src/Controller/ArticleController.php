@@ -48,7 +48,7 @@ class ArticleController extends AbstractController
             $entityManager->flush();
             //envoi du message
             $message = (new \Swift_Message('Un nouvel article vient d\'être publié !'))
-                ->setTo('ludlud59@live.fr')
+                ->setTo('123@live.fr')
                 ->setBody($this->renderView('article/email/notification.html.twig',['article'=> $article]));
                 $mailer->send($message);
 
@@ -73,11 +73,11 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
-     * @IsGranted("ROLE_AUTHOR")
      */
     public function edit(Request $request, Article $article): Response
     {
-        $this->denyAccessUnlessGranted('EDIT', $article);
+        $this->denyAccessUnlessGranted(['EDIT', 'ROLE_ADMIN'], $article);
+
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
